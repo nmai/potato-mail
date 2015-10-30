@@ -53,8 +53,8 @@ function saveMessage (connection, data) {
   console.log('----End Message----')
 
   try {
-    fs.writeFile(parseInt(msgcount) + '.json', data, function (){
-      console.log('Wrote message #' + parseInt(msgcount) + 'to disk.')
+    fs.writeFile(msgcount.toString() + '.json', data, function (){
+      console.log('Wrote message #' + msgcount.toString() + 'to disk.')
     })
   } catch (err) {
     console.log(err)
