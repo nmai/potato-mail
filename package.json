@@ -1,0 +1,31 @@
+{
+  "name": "potato-mail",
+  "version": "0.1.0",
+  "description": "Saves inbound emails.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nmai/potato-mail.git"
+  },
+  "keywords": [
+    "mail",
+    "email",
+    "potato",
+    "potatoes"
+  ],
+  "author": "Nick Mai",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/nmai/potato-mail/issues"
+  },
+  "homepage": "https://github.com/nmai/potato-mail#readme",
+  "dependencies": {
+    "mailin": "^3.0.1"
+  },
+  "devDependencies": {
+    "standard": "^5.3.1"
+  }
+}
