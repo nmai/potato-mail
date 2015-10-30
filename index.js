@@ -37,16 +37,14 @@ mailin.on('message', function (connection, data, content) {
 
 function saveMessage (connection, data) {
   // JS Standard wants each declaration as a separate statement
-  var from = data.from
-  var to = data.to
   var subject = data.subject
   var cc = data.cc
   var body = data.envelopeFrom.text
 
   console.log('----Received New Message----')
-  for (var f in from)
-    console.log('From: ' + f.name + '(' + f.address + ')')
-  for (var t in to)
+  for (var f in data.from)
+    console.log('From: ' + f['name'] + '(' + f['address'] + ')')
+  for (var t in data.to)
     console.log('To: ' + t.name + '(' + t.address + ')')
   console.log('CC: ' + cc)
   console.log('Subject: ' + subject)
