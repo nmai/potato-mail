@@ -28,12 +28,16 @@ mailin.on('message', function (connection, data, content) {
   // Not interested in 'content' because this is the raw email.
   // 'data' represents the parsed email.
 
+  saveMessage(data)
+})
+
+function saveMessage (data) {
   // JS Standard wants each declaration as a separate statement
-  var from    = data.from
-  var to      = data.to
+  var from = data.from
+  var to = data.to
   var subject = data.subject
-  var cc      = data.cc
-  var body    = data.envelopeFrom.text
+  var cc = data.cc
+  var body = data.envelopeFrom.text
 
   console.log('----Received New Message----')
   console.log('From: ' + from.name + '(' + from.address + ')')
@@ -43,4 +47,4 @@ mailin.on('message', function (connection, data, content) {
   console.log('----')
   console.log(body)
   console.log('----End Message----')
-})
+}
