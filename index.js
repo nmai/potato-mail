@@ -1,6 +1,10 @@
 // Nick Mai 2015
 
 var mailin = require('mailin')
+var fs = require('fs')
+
+// Cleanup
+var msgcount = 0
 
 /* Start the Mailin server. The available options are:
  *  options = {
@@ -28,13 +32,13 @@ mailin.on('message', function (connection, data, content) {
   // Not interested in 'content' because this is the raw email.
   // 'data' represents the parsed email.
 
-  saveMessage(data)
+  saveMessage(connection, data)
 })
 
 function saveMessage (data) {
   // JS Standard wants each declaration as a separate statement
-  var from = data.from
-  var to = data.to
+  var from = connection.from
+  var to = connection.to
   var subject = data.subject
   var cc = data.cc
   var body = data.envelopeFrom.text
@@ -47,4 +51,12 @@ function saveMessage (data) {
   console.log('----')
   console.log(body)
   console.log('----End Message----')
+
+  try {
+    fs.writeFile(parseInt(msgCount) + '.json', data, function (){
+      console.log('Wrote message #' + parseInt(msgcount) + 'to disk.')
+    })
+  } catch (err) {
+    console.log(err)
+  }
 }
