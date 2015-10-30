@@ -23,6 +23,12 @@ mailin.start({
   disableWebhook: true // Disable the webhook posting.
 })
 
+/* Access simplesmtp server instance. */
+mailin.on('authorizeUser', function (connection, username, password, done) {
+  // Credentials are typically checked here, but I just want to log all emails.
+  done(null, true)
+})
+
 /* Event emitted when a connection with the Mailin smtp server is initiated. */
 mailin.on('startMessage', function (connection) {
   /* connection = {
