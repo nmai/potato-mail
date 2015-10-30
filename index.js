@@ -35,7 +35,7 @@ mailin.on('message', function (connection, data, content) {
   saveMessage(connection, data)
 })
 
-function saveMessage (data) {
+function saveMessage (connection, data) {
   // JS Standard wants each declaration as a separate statement
   var from = connection.from
   var to = connection.to
@@ -53,7 +53,7 @@ function saveMessage (data) {
   console.log('----End Message----')
 
   try {
-    fs.writeFile(parseInt(msgCount) + '.json', data, function (){
+    fs.writeFile(parseInt(msgcount) + '.json', data, function (){
       console.log('Wrote message #' + parseInt(msgcount) + 'to disk.')
     })
   } catch (err) {
