@@ -23,27 +23,24 @@ mailin.start({
   disableWebhook: true // Disable the webhook posting.
 })
 
-/* Access simplesmtp server instance. */
-mailin.on('authorizeUser', function (connection, username, password, done) {
-  // Credentials are typically checked here, but I just want to log all emails.
-  done(null, true)
-})
-
-/* Event emitted when a connection with the Mailin smtp server is initiated. */
-mailin.on('startMessage', function (connection) {
-  /* connection = {
-      from: 'sender@somedomain.com',
-      to: 'someaddress@yourdomain.com',
-      id: 't84h5ugf',
-      authentication: { username: null, authenticated: false, status: 'NORMAL' }
-    }
-  }; */
-  console.log(connection)
-})
-
 /* Event emitted after a message was received and parsed. */
 mailin.on('message', function (connection, data, content) {
-  console.log(data)
-  /* Do something useful with the parsed message here. */
-  console.log(content)
+  // Not interested in 'content' because this is the raw email.
+  // 'data' represents the parsed email.
+
+  // JS Standard wants each declaration as a separate statement
+  var from    = data.from
+  var to      = data.to
+  var subject = data.subject
+  var cc      = data.cc
+  var body    = data.envelopeFrom.text
+
+  console.log('----Received New Message----')
+  console.log('From: ' + from.name + '(' + from.address + ')')
+  console.log('To: ' + to.name + '(' + to.address + ')')
+  console.log('CC: ' + cc)
+  console.log('Subject: ' + subject)
+  console.log('----')
+  console.log(body)
+  console.log('----End Message----')
 })
