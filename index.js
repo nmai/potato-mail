@@ -49,6 +49,16 @@ server.post('/webhook', function (req, res) {
 
       console.log('Parsed fields: ' + Object.keys(fields))
 
+      if (fields.from) {
+        if (fields.from[0].name)
+          console.log('GOT THE NAME: ' + fields.from[0].name)
+        else
+          console.log('fields.from existed but couldnt retrieve name')
+      } else {
+        console.log('fields.from does not exist, uninstall Sublime and stop trying to write code')
+      }
+
+
       /* Write down the payload for ulterior inspection. */
       async.auto({
         writeParsedMessage: function (cbAuto) {
