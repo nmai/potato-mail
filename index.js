@@ -42,7 +42,7 @@ server.post('/webhook', function (req, res) {
   }()))
 
   form.parse(req, function (err, pfields) {
-    var fields = pfields[0] ? Array.isArray(pfields) : pfields
+    var fields = Array.isArray(pfields) ? pfields[0] : pfields
 
     if (!err) {
       console.log(util.inspect(fields.mailinMsg, {
