@@ -39,14 +39,14 @@ function saveMessage (connection, data) {
   // JS Standard wants each declaration as a separate statement
   var from = JSON.parse(data.from)
   var to = JSON.parse(data.to)
-  console.log('test from: ' + from.name + " to: " + to.name)
+  console.log('test from: ' + from.name + ' to: ' + to.name)
   var subject = data.subject
   var cc = data.cc
   var body = data.text
 
   console.log('----Received New Message----')
   for (var f in data.from)
-    console.log('From: ' + JSON.parse(a).name + '(' + JSON.parse(a).address + ')')
+    console.log('From: ' + JSON.parse(f).name + '(' + JSON.parse(f).address + ')')
   for (var t in data.to)
     console.log('To: ' + t.name + '(' + t.address + ')')
   console.log('CC: ' + cc)
