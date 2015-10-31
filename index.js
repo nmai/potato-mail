@@ -41,21 +41,19 @@ server.post('/webhook', function (req, res) {
     }
   }()))
 
-  form.parse(req, function (err, fields) {
+  form.parse(req, function (err, pfields) {
+    var fields = pfields[0] ? Array.isArray(pfields) : pfields
+
     if (!err) {
       console.log(util.inspect(fields.mailinMsg, {
         depth: 5
       }))
 
-      console.log('fields is array? ' + Array.isArray(fields.mailinMsg))
-      console.log('fields[0]' + JSON.stringify(fields.mailinMsg[0]))
-
       console.log('Parsed fields: ' + Object.keys(fields))
 
-      var pmsg = JSON.parse(fields.mailinMsg[0])
-      if (pmsg) {
-        if (pmsg.from[0].name) {
-          console.log('GOT THE NAME: ' + pmsg.from[0].name)
+      if (fields.from) {
+        if (fields.from[0].name) {
+          console.log('GOT THE NAME: ' + fields.from[0].name)
         } else {
           console.log('fields.mailinmsg.from existed but couldnt retrieve name')
         }
