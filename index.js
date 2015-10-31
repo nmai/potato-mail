@@ -83,6 +83,16 @@ server.listen(8001, function (err) {
   }
 })
 
+process.on('uncaughtException', function (err) {
+  console.log(err)
+  server.close()
+})
+
+process.on('SIGTERM', function (err) {
+  console.log(err)
+  server.close()
+})
+
 mailin.start({
   port: 25,
   webhook: 'http://127.0.0.1:8001/webhook'
