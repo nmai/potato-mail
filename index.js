@@ -75,7 +75,7 @@ server.post('/webhook', function (req, res) {
   })
 })
 
-server.listen(3000, function (err) {
+server.listen(8001, function (err) {
   if (err) {
     console.log(err)
   } else {
@@ -85,5 +85,5 @@ server.listen(3000, function (err) {
 
 mailin.start({
   port: 25,
-  webhook: 'http://127.0.0.1:3000/webhook'
+  webhook: 'http://127.0.0.1:8001/webhook'
 })
