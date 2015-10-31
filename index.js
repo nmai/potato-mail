@@ -75,7 +75,7 @@ server.post('/webhook', function (req, res) {
   })
 })
 
-server.listen(8001, function (err) {
+var http = server.listen(8001, function (err) {
   if (err) {
     console.log(err)
   } else {
@@ -85,12 +85,12 @@ server.listen(8001, function (err) {
 
 process.on('uncaughtException', function (err) {
   console.log(err)
-  server.close()
+  http.close()
 })
 
 process.on('SIGTERM', function (err) {
   console.log(err)
-  server.close()
+  http.close()
 })
 
 mailin.start({
