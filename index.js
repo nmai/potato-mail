@@ -41,24 +41,26 @@ server.post('/webhook', function (req, res) {
     }
   }()))
 
-  form.parse(req, function (err, pfields) {
-    var fields = Array.isArray(pfields) ? pfields[0] : pfields
+  form.parse(req, function (err, fields) {
+    // Important: `fields` is a string representation of an object wrapped in an array.
+    var parsedMailinMsg = JSON.parse(fields.mailinMsg)
+
+    // To avoid headaches later, make sure the message type is Object not Array.
+    var message = Array.isArray(parsedMailinMsg) ? parsedMailinMsg[0] : parsedMailinMsg
 
     if (!err) {
-      console.log(util.inspect(fields.mailinMsg, {
+      console.log(util.inspect(message, {
         depth: 5
       }))
 
-      console.log('Parsed fields: ' + Object.keys(fields))
-
-      if (fields.from) {
-        if (fields.from[0].name) {
-          console.log('GOT THE NAME: ' + fields.from[0].name)
+      if (message.from) {
+        if (message.from[0].name) {
+          console.log('GOT THE NAME: ' + message.from[0].name)
         } else {
-          console.log('fields.mailinmsg.from existed but couldnt retrieve name')
+          console.log('message.from existed but couldnt retrieve name')
         }
       } else {
-        console.log('fields.mailinmsg does not exist, uninstall Sublime and stop trying to write code')
+        console.log('message.from does not exist, uninstall Sublime and stop trying to write code')
       }
 
       /* Write down the payload for ulterior inspection. */
@@ -67,8 +69,7 @@ server.post('/webhook', function (req, res) {
           fs.writeFile('payload.json', fields.mailinMsg, cbAuto)
         },
         writeAttachments: function (cbAuto) {
-          var msg = JSON.parse(fields.mailinMsg)
-          async.eachLimit(msg.attachments, 3, function (attachment, cbEach) {
+          async.eachLimit(message.attachments, 3, function (attachment, cbEach) {
             fs.writeFile(attachment.generatedFileName, fields[attachment.generatedFileName], 'base64', cbEach)
           }, cbAuto)
         }
