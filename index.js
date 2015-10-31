@@ -49,13 +49,13 @@ server.post('/webhook', function (req, res) {
 
       console.log('Parsed fields: ' + Object.keys(fields))
 
-      if (fields.from) {
-        if (fields.from[0].name)
-          console.log('GOT THE NAME: ' + fields.from[0].name)
+      if (fields.maillinMsg) {
+        if (fields.maillinMsg.from[0].name)
+          console.log('GOT THE NAME: ' + fields.maillinMsg.from[0].name)
         else
-          console.log('fields.from existed but couldnt retrieve name')
+          console.log('fields.mailinmsg.from existed but couldnt retrieve name')
       } else {
-        console.log('fields.from does not exist, uninstall Sublime and stop trying to write code')
+        console.log('fields.mailinmsg does not exist, uninstall Sublime and stop trying to write code')
       }
 
 
