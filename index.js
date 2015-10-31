@@ -1,65 +1,89 @@
-// Nick Mai 2015
+'use strict'
 
-var mailin = require('mailin')
+var async = require('async')
+var express = require('express')
 var fs = require('fs')
+var mailin = require('mailin')
+var multiparty = require('multiparty')
+var util = require('util')
 
-// Cleanup
-var msgcount = 0
+/* Make an http server to receive the webhook. */
+var server = express()
 
-/* Start the Mailin server. The available options are:
- *  options = {
- *     port: 25,
- *     webhook: 'http://mydomain.com/mailin/incoming,
- *     disableWebhook: false,
- *     logFile: '/some/local/path',
- *     logLevel: 'warn', // One of silly, info, debug, warn, error
- *     smtpOptions: { // Set of options directly passed to simplesmtp.createServer(smtpOptions)
- *        SMTPBanner: 'Hi from a custom Mailin instance',
- *        // By default, the DNS validation of the sender and recipient domains is disabled so.
- *        // You can enable it as follows:
- *        disableDNSValidation: false
- *     }
- *  };
- * Here disable the webhook posting so that you can do what you want with the
- * parsed message. */
+server.head('/webhook', function (req, res) {
+  console.log('Received head request from webhook.')
+  res.send(200)
+})
+
+server.post('/webhook', function (req, res) {
+  console.log('Receiving webhook.')
+
+  /* Respond early to avoid timouting the mailin server. */
+  // res.send(200)
+
+  /* Parse the multipart form. The attachments are parsed into fields and can
+   * be huge, so set the maxFieldsSize accordingly. */
+  var form = new multiparty.Form({
+    maxFieldsSize: 70000000
+  })
+
+  form.on('progress', (function () {
+    var start = Date.now()
+    var lastDisplayedPercentage = -1
+    return function (bytesReceived, bytesExpected) {
+      var elapsed = Date.now() - start
+      var percentage = Math.floor(bytesReceived / bytesExpected * 100)
+      if (percentage % 20 === 0 && percentage !== lastDisplayedPercentage) {
+        lastDisplayedPercentage = percentage
+        console.log('Form upload progress ' +
+            percentage + '% of ' + bytesExpected / 1000000 + 'Mb. ' + elapsed + 'ms')
+      }
+    }
+  }()))
+
+  form.parse(req, function (err, fields) {
+    if (!err) {
+      console.log(util.inspect(fields.mailinMsg, {
+        depth: 5
+      }))
+
+      console.log('Parsed fields: ' + Object.keys(fields))
+
+      /* Write down the payload for ulterior inspection. */
+      async.auto({
+        writeParsedMessage: function (cbAuto) {
+          fs.writeFile('payload.json', fields.mailinMsg, cbAuto)
+        },
+        writeAttachments: function (cbAuto) {
+          var msg = JSON.parse(fields.mailinMsg)
+          async.eachLimit(msg.attachments, 3, function (attachment, cbEach) {
+            fs.writeFile(attachment.generatedFileName, fields[attachment.generatedFileName], 'base64', cbEach)
+          }, cbAuto)
+        }
+      }, function (err) {
+        if (err) {
+          console.log(err.stack)
+          res.send(500, 'Unable to write payload')
+        } else {
+          console.log('Webhook payload written.')
+          res.send(200)
+        }
+      })
+    } else {
+      console.log(err)
+    }
+  })
+})
+
+server.listen(3000, function (err) {
+  if (err) {
+    console.log(err)
+  } else {
+    console.log('Http server listening on port 3000')
+  }
+})
+
 mailin.start({
   port: 25,
-  disableWebhook: true // Disable the webhook posting.
+  webhook: 'http://127.0.0.1:3000/webhook'
 })
-
-/* Event emitted after a message was received and parsed. */
-mailin.on('message', function (connection, data, content) {
-  // Not interested in 'content' because this is the raw email.
-  // 'data' represents the parsed email.
-
-  saveMessage(connection, data)
-})
-
-function saveMessage (connection, data) {
-  // JS Standard wants each declaration as a separate statement
-  var from = JSON.parse(data.from)
-  var to = JSON.parse(data.to)
-  console.log('test from: ' + from.name + ' to: ' + to.name)
-  var subject = data.subject
-  var cc = data.cc
-  var body = data.text
-
-  console.log('----Received New Message----')
-  for (var f in data.from)
-    console.log('From: ' + JSON.parse(f).name + '(' + JSON.parse(f).address + ')')
-  for (var t in data.to)
-    console.log('To: ' + t.name + '(' + t.address + ')')
-  console.log('CC: ' + cc)
-  console.log('Subject: ' + subject)
-  console.log('----')
-  console.log(body)
-  console.log('----End Message----')
-
-  try {
-    fs.writeFile(msgcount.toString() + '.json', JSON.stringify(data), function () {
-      console.log('Wrote message #' + msgcount.toString() + 'to disk.')
-    })
-  } catch (err) {
-    console.log(err)
-  }
-}

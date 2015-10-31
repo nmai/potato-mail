@@ -1,6 +1,6 @@
 {
   "name": "potato-mail",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Saves inbound emails.",
   "main": "index.js",
   "scripts": {
@@ -23,7 +23,9 @@
   },
   "homepage": "https://github.com/nmai/potato-mail#readme",
   "dependencies": {
-    "mailin": "^3.0.1"
+    "express": "^4.13.3",
+    "mailin": "^3.0.1",
+    "multiparty": "^4.1.2"
   },
   "devDependencies": {
     "standard": "^5.3.1"
