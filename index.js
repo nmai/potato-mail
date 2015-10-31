@@ -10,6 +10,27 @@ var util = require('util')
 /* Make an http server to receive the webhook. */
 var server = express()
 
+/* Grabs the important parts of a message (name, subject, etc) */
+// For now, it only prints the results.
+function writeMessage(msg) {
+  var targets = ['subject', 'text', 'from', 'to', 'cc', 'receivedDate']
+
+  // @todo: Loop through targets and attempt to match fields with msg
+  //        Check if each field is an array, if so, loop through entirely.
+  
+
+/*
+  if (msg.from) {
+    if (msg.from[0].name) {
+      console.log('GOT THE NAME: ' + msg.from[0].name)
+    } else {
+      console.log('message.from existed but couldnt retrieve name')
+    }
+  } else {
+    console.log('message.from does not exist, uninstall Sublime and stop trying to write code')
+  }*/
+}
+
 server.head('/webhook', function (req, res) {
   console.log('Received head request from webhook.')
   res.send(200)
@@ -53,15 +74,7 @@ server.post('/webhook', function (req, res) {
         depth: 5
       }))
 
-      if (message.from) {
-        if (message.from[0].name) {
-          console.log('GOT THE NAME: ' + message.from[0].name)
-        } else {
-          console.log('message.from existed but couldnt retrieve name')
-        }
-      } else {
-        console.log('message.from does not exist, uninstall Sublime and stop trying to write code')
-      }
+      writeMessage(message)
 
       /* Write down the payload for ulterior inspection. */
       async.auto({
