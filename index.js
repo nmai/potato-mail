@@ -14,32 +14,35 @@ var server = express()
 var save_fields = ['subject', 'text', 'from', 'to', 'cc', 'receivedDate']
 
 // You can provide fields during construction or just set the later.
-function SimpleMessage (msg) => {
+class SimpleMessage {
   // @todo: copy msg items over
-}
+  constructor (msg) {
 
-/* This returns a well-formatted string fit for printing to console or saving */
-/* Note: The order of the items (subject, sender, etc) is dependent on the
-         order in which they were added.                                      */
-// @todo: Enforce strict ordering
-SimpleMessage.prototype.toString = () => {
-  // Items that match save_fields take priority because they're ordered
-  for (var field in save_fields) {
-    // @todo: define some helper functions for custom formatting
-    // for example, 'to' could contain multiple items and I'd want to print them
-    // with a format like 'Nick (nick@mail.com), Jessica (jess@mail.com)'
-    console.log(field)
   }
 
-  // There should not be any items that aren't in save_fields, but just in case:
+  /* This returns a well-formatted string fit for printing to console or saving */
+  /* Note: The order of the items (subject, sender, etc) is dependent on the
+           order in which they were added.                                      */
+  // @todo: Enforce strict ordering
+  valueOf () {
+    // Items that match save_fields take priority because they're ordered
+    for (let field in save_fields) {
+      // @todo: define some helper functions for custom formatting
+      // for example, 'to' could contain multiple items and I'd want to print them
+      // with a format like 'Nick (nick@mail.com), Jessica (jess@mail.com)'
+      console.log(field)
+    }
 
-  // @todo: I'm sure theres a one-liner for "cookie cutting". I want to create
-  // a list of items that aren't in save_fields.
-  var non_save_fields = {}
-  // populate
-  // print
-  for (var non_field in non_save_fields) {
-    console.log(non_field)
+    // There should not be any items that aren't in save_fields, but just in case:
+
+    // @todo: I'm sure theres a one-liner for "cookie cutting". I want to create
+    // a list of items that aren't in save_fields.
+    var non_save_fields = {}
+    // populate
+    // print
+    for (let field in non_save_fields) {
+      console.log(field)
+    }
   }
 }
 
@@ -154,3 +157,6 @@ mailin.start({
   port: 25,
   webhook: 'http://127.0.0.1:8001/webhook'
 })
+
+var testMessage = new SimpleMessage()
+console.log(testMessage + '')
