@@ -10,25 +10,56 @@ var util = require('util')
 /* Make an http server to receive the webhook. */
 var server = express()
 
+/* OPTIONS */
+var save_fields = ['subject', 'text', 'from', 'to', 'cc', 'receivedDate']
+
+// You can provide fields during construction or just set the later.
+function SimpleMessage (msg) => {
+  // @todo: copy msg items over
+}
+
+/* This returns a well-formatted string fit for printing to console or saving */
+/* Note: The order of the items (subject, sender, etc) is dependent on the
+         order in which they were added.                                      */
+// @todo: Enforce strict ordering
+SimpleMessage.prototype.toString = () => {
+  // Items that match save_fields take priority because they're ordered
+  for (var field in save_fields) {
+    // @todo: define some helper functions for custom formatting
+    // for example, 'to' could contain multiple items and I'd want to print them
+    // with a format like 'Nick (nick@mail.com), Jessica (jess@mail.com)'
+    console.log(field)
+  }
+
+  // There should not be any items that aren't in save_fields, but just in case:
+
+  // @todo: I'm sure theres a one-liner for "cookie cutting". I want to create
+  // a list of items that aren't in save_fields.
+  var non_save_fields = {}
+  // populate
+  // print
+  for (var non_field in non_save_fields) {
+    console.log(non_field)
+  }
+}
+
 /* Grabs the important parts of a message (name, subject, etc) */
 // For now, it only prints the results.
-function writeMessage(msg) {
-  var targets = ['subject', 'text', 'from', 'to', 'cc', 'receivedDate']
+function writeMessage (msg) {
+  var simpleMessage = new SimpleMessage()
 
-  // @todo: Loop through targets and attempt to match fields with msg
-  //        Check if each field is an array, if so, loop through entirely.
-  
-
-/*
-  if (msg.from) {
-    if (msg.from[0].name) {
-      console.log('GOT THE NAME: ' + msg.from[0].name)
+  // @todo: perhaps move this logic to SimpleMessage
+  // or perhaps get rid of this altogether?
+  for (var item in save_fields) {
+    var val = msg[item]
+    if (val) {
+      simpleMessage[item] = val
     } else {
-      console.log('message.from existed but couldnt retrieve name')
+      simpleMessage[item] = '--'
     }
-  } else {
-    console.log('message.from does not exist, uninstall Sublime and stop trying to write code')
-  }*/
+  }
+
+  console.log(simpleMessage)
 }
 
 server.head('/webhook', function (req, res) {
