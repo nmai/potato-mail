@@ -1,12 +1,13 @@
 {
   "name": "potato-mail",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Saves inbound emails.",
   "main": "index.js",
   "scripts": {
     "test-nolint": "node tests/test-main.js",
     "test": "snazzy && node tests/test-main.js",
-    "start": "node index.js"
+    "start": "node index.js",
+    "prepublish": "babel --preset es2015"
   },
   "repository": {
     "type": "git",
