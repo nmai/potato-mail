@@ -4,7 +4,9 @@
   "description": "Saves inbound emails.",
   "main": "index.js",
   "scripts": {
-    "test": "snazzy && node index.js "
+    "test-nolint": "node tests/test-main.js",
+    "test": "snazzy && node tests/test-main.js",
+    "start": "node index.js"
   },
   "repository": {
     "type": "git",
