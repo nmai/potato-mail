@@ -9,6 +9,13 @@ let log = console.log
 
 let SimpleMessage = require('../lib/simple-message')
 
+log('-----------------')
+log('Creating a SimpleMessage instance with nothing passed to constructor')
 let msg = new SimpleMessage()
-
-log(msg)
+log('Stringify results:')
+log(JSON.stringify(msg))
+log('-----------------')
+log('toString results:')
+log(msg.toString())
+log('-----------------')
+log('super thorough unit testing: complete')

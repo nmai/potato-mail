@@ -1,6 +1,6 @@
 {
   "name": "potato-mail",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Saves inbound emails.",
   "main": "index.js",
   "scripts": {
