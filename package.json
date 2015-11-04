@@ -1,13 +1,19 @@
 {
   "name": "potato-mail",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "Saves inbound emails.",
   "main": "index.js",
+  "babel": {
+    "presets": ["es2015"],
+    "comments": false,
+    "auxiliaryCommentBefore": "This is output from the Babel transpiler. Edit the ES6 source in /src instead."
+  },
   "scripts": {
+    "compile": "babel src/ -d build/",
     "test-nolint": "node tests/test-main.js",
     "test": "snazzy && node tests/test-main.js",
     "start": "node index.js",
-    "prepublish": "babel --preset es2015"
+    "prepublish": "npm run compile"
   },
   "repository": {
     "type": "git",
@@ -29,12 +35,13 @@
     "async": "^1.5.0",
     "express": "^4.13.3",
     "mailin": "^3.0.1",
-    "multiparty": "^4.1.2"
+    "multiparty": "^4.1.2",
+    "semver": "^5.0.3"
   },
   "devDependencies": {
     "babel": "^6.0.15",
     "babel-preset-es2015": "^6.0.15",
-    "jest": "^0.1.40",
+    "jest-cli": "^0.7.0",
     "standard": "^5.3.1"
   }
 }
