@@ -89,7 +89,7 @@ var http = server.listen(8001, function (err) {
   if (err) {
     console.log(err)
   } else {
-    console.log('Http server listening on port 3000')
+    console.log('Http server listening on port 8001')
   }
 })
 
