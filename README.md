@@ -10,7 +10,9 @@ In the future, I'd like to add full-scale message handling capabilities such as:
 * Integration with other apps/services.
 
 Potato is intended to be run as a daemon. To launch it on startup in Ubuntu:
-`sudo npm install -g potato-mail
-`sudo update-rc.d potato-mail defaults`
+```sh
+sudo npm install -g potato-mail
+sudo update-rc.d potato-mail defaults`
+```
 
 In a full production environment, you might want to use [Supervisor](http://supervisord.org/) instead, as it's simple to configure and it offers a lot more features.
